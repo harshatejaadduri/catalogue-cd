@@ -1,0 +1,7 @@
+deployment:
+  image: harshatejaadduri/catalogue
+  version: IMAGE_VERSION
+
+hpa:
+  avgcpu: 75
+  
