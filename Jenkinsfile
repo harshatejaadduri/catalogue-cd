@@ -13,7 +13,7 @@ pipeline{
         ansiColor('xterm')
     }
     parameters{
-        string(name: 'appVersion', decription: 'Image version of the application')
+        string(name: 'appVersion', description: 'Image version of the application')
         choice(name: 'deploy_to', choices: ['dev','prod','qa'] , description: 'pick up an environment')
     }
     stages{
