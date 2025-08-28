@@ -1,6 +1,6 @@
 pipeline{
     agent{
-        labels 'AGENT-1'
+        label 'AGENT-1'
     }
     environment{
         ACC_ID = "513993748676"
@@ -19,11 +19,14 @@ pipeline{
     stages{
         stage('Deploy'){
          steps{
+            script{
                 withAWS(credentials: 'aws-creds', region: 'us-east-1') {
                         sh """
                             aws eks update-kubeconfig --region $REGION --name "k8-$PROJECT-${params.deploy_to}"
                             kubectl get nodes
                             """
+            }
+                
                 }      
             }
 
