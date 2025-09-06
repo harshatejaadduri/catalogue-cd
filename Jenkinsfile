@@ -20,16 +20,41 @@ pipeline{
         stage('Deploy'){
          steps{
             script{
-                withAWS(credentials: 'aws-creds', region: 'us-east-1') {
+                withAWS(credentials: 'aws-creds', region: 'us-east-1'){
                         sh """
                             aws eks update-kubeconfig --region $REGION --name "k8-$PROJECT-${params.deploy_to}"
                             kubectl get nodes
+                            kubectl create -f namespace.yaml
+                            sed -i "s/IMAGE_VERSION/${appVersion}/g" values-${params.deploy_to}.yaml
+                            helm upgrade --install $COMPONENT -f values-${params.deploy_to}.yaml -n $PROJECT .
                             """
-            }
-                
+                        }
                 }      
             }
-
+        }
+        stage('Deploy'){
+         steps{
+            script{
+                withAWS(credentials: 'aws-creds', region: 'us-east-1'){
+                    def deploymentStatus = sh( returnStdout = true, script: "kubectl rollout status deployment/catalogue --timeout=30sec -n $PROJECT || echo FAILED" ).trim()
+                    if (deploymentStatus.contains("successfully rolled out" )) {
+                        echo "Deployment is successful"
+                    } 
+                    else {
+                        sh """
+                            helm rollback $COMPONENT -n $PROJECT
+                           """
+                                def deploymentStatus = sh( returnStdout = true, script: "kubectl rollout status deployment/catalogue --timeout=30sec -n $PROJECT|| echo FAILED" ).trim()
+                            if (deploymentStatus.contains("successfully rolled out ")) {
+                                error "Deployment is failure, Rollback success"
+                            }
+                            else{
+                                error "" "Deployment is Failure, Rollback is Failure, Application is not running"
+                            } 
+                        }  
+                    }          
+                }      
+            }
         }
     }
     post{

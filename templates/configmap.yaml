@@ -9,4 +9,4 @@ metadata:
      tier: backend  
 data:
  MONGO: "true" 
- MONGO_URL: "mongodb://mongodb:27017/catalogue"
+ MONGO_URL: {{ .Values.configmap.MONGO_URL }}

@@ -1,0 +1,9 @@
+deployment:
+  image: 513993748676.dkr.ecr.us-east-1.amazonaws.com/roboshop/catalogue
+  version: IMAGE_VERSION
+
+hpa:
+  avgcpu: 75
+  
+configmap:
+  MONGO_URL: "mongodb://mongodb:27017/catalogue"
