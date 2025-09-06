@@ -1,6 +1,6 @@
 deployment:
   image: 513993748676.dkr.ecr.us-east-1.amazonaws.com/roboshop/catalogue
-  version: IMAGE_VERSION
+  version: 1.0.0
 
 hpa:
   avgcpu: 75
