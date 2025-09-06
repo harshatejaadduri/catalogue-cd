@@ -1,4 +1,4 @@
-@Library('jenkins-shared-library')_
+@Library('jenkins-shared-libraries')_
 
 def configMap = [
     component: "catalogue",
