@@ -5,9 +5,5 @@ def configMap = [
     project: "roboshop"
 ]
 
-if( ! env.BRANCH_NAME.equalsIgnoreCase('main') ){
-    deploymentPipeline(configMap)
-}
-else{
-    echo "Proceed with PROD"
-}
+  deploymentPipeline(configMap)
+
